@@ -1,9 +1,9 @@
 export module parking;
 
 #if defined(__linux__) || defined(_WIN32)
-export import parking.futex;
+import parking.futex;
 #else
-export import parking.pthread;
+import parking.pthread;
 #endif
 
 namespace parking
