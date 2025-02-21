@@ -15,6 +15,7 @@ target_sources(
   parking
   PUBLIC FILE_SET
          CXX_MODULES
+         BASE_DIRS src
          FILES
          src/mod.ixx
          src/pal/mod.ixx
@@ -26,11 +27,38 @@ target_sources(
 # Add installation rules
 if(PROJECT_IS_TOP_LEVEL)
   include(GNUInstallDirs)
+  include(CMakePackageConfigHelpers)
 
+  # Configure version and config files
+  write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/parking-config-version.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion)
+
+  configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/parking-config.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/parking-config.cmake"
+    INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/parking")
+
+  # Install targets and config files
   install(
     TARGETS parking
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+    EXPORT parking-targets
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    FILE_SET CXX_MODULES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/parking")
+
+  install(
+    EXPORT parking-targets
+    FILE parking-targets.cmake
+    NAMESPACE parking::
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/parking")
+
+  install(
+    FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/parking-config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/parking-config-version.cmake"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/parking")
 endif()
 
 # Testing configuration
