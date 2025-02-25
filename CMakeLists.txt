@@ -17,12 +17,12 @@ target_sources(
          CXX_MODULES
          BASE_DIRS src
          FILES
-         src/mod.ixx
-         src/pal/mod.ixx
-         src/pthread.ixx
-         src/futex.ixx
-         src/pal/unix/futex.ixx
-         src/pal/windows/futex.ixx)
+         src/mod.cppm
+         src/pal/mod.cppm
+         src/pthread.cppm
+         src/futex.cppm
+         src/pal/unix/futex.cppm
+         src/pal/windows/futex.cppm)
 
 # Add installation rules
 if(PROJECT_IS_TOP_LEVEL)
